@@ -1,0 +1,36 @@
+{
+  "name": "Back-End",
+  "version": "1.0.0",
+  "description": "Backend implementation of build week",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^4.1.1",
+    "init": "^0.1.2",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.21.5",
+    "sqlite3": "^5.0.0"
+  },
+  "devDependencies": {
+    "jest": "^26.4.2",
+    "nodemon": "^2.0.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/valerievazq/Back-End.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/valerievazq/Back-End/issues"
+  },
+  "homepage": "https://github.com/valerievazq/Back-End#readme"
+}
