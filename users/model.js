@@ -14,10 +14,7 @@ function getAllUsers() {
 }
 
 function getUserById(id) {
-  return db("users")
-    .select("id", "username", "department")
-    .where({ id })
-    .first();
+  return db("users").select("id", "username").where({ id }).first();
 }
 
 function getUserByUserName(filter) {
