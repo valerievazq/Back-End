@@ -1,22 +1,20 @@
 const jwt = require("jsonwebtoken");
+const users = require("../users/model");
 
-module.exports = (req, res, next) => {
-  const token = req.headers.authorization;
+async function restricted(req, res, next) {
   try {
-    if (token) {
-      jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
-        if (err) {
-          console.log(err);
-          res.status(401).json({ status: 401, message: "Invalid Credentials" });
-        } else {
-          req.decodedToken = decodedToken;
-          next();
-        }
-      });
-    } else {
-      res.status(401).json({ message: "Invalid Credentials", status: 401 });
-    }
-  } catch (err) {
-    console.log(err);
+    const decoded = jwt.verify(
+      req.headers.authorization,
+      process.env.JWT_SECRET
+    );
+    const user = await users.findById(decoded.subject);
+    if (!user) throw new Error();
+    req.user = user;
+
+    next();
+  } catch (error) {
+    res.status(401).json({ message: "you shall not pass!!" });
   }
-};
+}
+
+module.exports = restricted;

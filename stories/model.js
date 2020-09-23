@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const Stories = require("./model");
 // const Users = require("../users/usersModel");
-const restrict = require("../middleware/restricted");
+const restricted = require("../middleware/restricted");
 
-router.get("/", restrict, async (req, res, next) => {
+router.get("/", restricted, async (req, res, next) => {
   try {
     const stories = await Stories.getAllStories();
     res.status(200).json(stories);
@@ -13,7 +13,7 @@ router.get("/", restrict, async (req, res, next) => {
   }
 });
 
-router.get("/:id", restrict, async (req, res, next) => {
+router.get("/:id", restricted, async (req, res, next) => {
   try {
     const id = req.params.id;
 
@@ -27,7 +27,7 @@ router.get("/:id", restrict, async (req, res, next) => {
   }
 });
 
-router.get("/username/:id", restrict, async (req, res, next) => {
+router.get("/username/:id", restricted, async (req, res, next) => {
   const stories = await Stories.getStoryByUserName(req.params.id);
   if (!stories) {
     return res.status(404).json({ message: "no stories found for this user" });
@@ -35,7 +35,7 @@ router.get("/username/:id", restrict, async (req, res, next) => {
   res.status(200).json(stories);
 });
 
-router.get("/userid/:id", restrict, async (req, res, next) => {
+router.get("/userid/:id", restricted, async (req, res, next) => {
   try {
     const story = await Stories.getStoryByUserId(req.params.id);
 
@@ -51,7 +51,7 @@ router.get("/userid/:id", restrict, async (req, res, next) => {
   }
 });
 
-router.post("/add", restrict, async (req, res, next) => {
+router.post("/add", restricted, async (req, res, next) => {
   try {
     const story = req.body;
 
@@ -68,7 +68,7 @@ router.post("/add", restrict, async (req, res, next) => {
   }
 });
 
-router.put("/update/:id", restrict, async (req, res, next) => {
+router.put("/update/:id", restricted, async (req, res, next) => {
   try {
     const id = req.params.id;
     const changes = req.body;
@@ -85,7 +85,7 @@ router.put("/update/:id", restrict, async (req, res, next) => {
   }
 });
 
-router.delete("/delete/:id", restrict, async (req, res, next) => {
+router.delete("/delete/:id", restricted, async (req, res, next) => {
   try {
     const id = req.params.id;
     await Stories.deleteStory(id);

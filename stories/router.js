@@ -12,7 +12,6 @@ module.exports = {
 
 function getAllStories() {
   return db("stories");
-  // .select("user_id", "id", "storyTitle", "storyDate", "story", "img");
 }
 
 function getStoryById(id) {
