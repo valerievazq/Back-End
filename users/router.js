@@ -5,7 +5,7 @@ const restricted = require("../middleware/restricted");
 const jwt = require("jsonwebtoken");
 // const validateUser = require("../middleware/verifyUser");
 const router = express.Router();
-
+const { jwtSecret } = require("../database/secret");
 router.get("/", restricted, async (req, res, next) => {
   try {
     const users = await Users.getAllUsers();
@@ -167,7 +167,7 @@ function generateToken(user) {
     expiresIn: "1d",
   };
 
-  return jwt.sign(payload, process.env.JWT_SECRET, options); // this method is synchronous
+  return jwt.sign(payload, jwtSecret, options); // this method is synchronous
 }
 
 module.exports = router;
