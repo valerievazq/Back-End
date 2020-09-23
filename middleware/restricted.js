@@ -7,7 +7,7 @@ async function restricted(req, res, next) {
       req.headers.authorization,
       process.env.JWT_SECRET
     );
-    const user = await users.findById(decoded.subject);
+    const user = await users.getUserById(decoded.subject);
     if (!user) throw new Error();
     req.user = user;
 

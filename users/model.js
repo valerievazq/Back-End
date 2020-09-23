@@ -14,18 +14,19 @@ function getAllUsers() {
 }
 
 function getUserById(id) {
-  return db("users").where({ id }).first();
+  return db("users")
+    .select("id", "username", "department")
+    .where({ id })
+    .first();
 }
 
-function getUserByUserName(username) {
-  return db("users").where({ username });
+function getUserByUserName(filter) {
+  return db("users").select("id", "username", "password").where(filter);
 }
-function AddUser(user) {
-  return db("users")
-    .insert(user, "id")
-    .then((ids) => {
-      return getUserById(ids[0]);
-    });
+
+async function AddUser(user) {
+  const [id] = await db("users").insert(user);
+  return getUserById(id);
 }
 
 function updateUser(id, changes) {

@@ -13,7 +13,7 @@ server.use(helmet());
 server.use(cors());
 server.use(express.json());
 
-server.use("/stories", storiesRouter);
-server.use("/users", restricted, userRouter);
+server.use("/stories", restricted, storiesRouter);
+server.use("/users", userRouter);
 
 module.exports = server;

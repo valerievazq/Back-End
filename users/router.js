@@ -6,6 +6,18 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 const { jwtSecret } = require("../database/secret");
 
+//REGISTER
+router.post("/register", (req, res) => {
+  const { username, password } = req.body;
+  const hash = bcrypt.hashSync(password, 12);
+
+  Users.AddUser({ username, password: hash })
+    .then((user) => {
+      res.status(201).json({ data: user });
+    })
+    .catch((err) => res.json({ error: err.message }));
+});
+
 router.get("/", restricted, async (req, res, next) => {
   try {
     const users = await Users.getAllUsers();
@@ -28,75 +40,6 @@ router.get("/:id", restricted, async (req, res, next) => {
     next(err);
   }
 });
-// router.post("/register", async (req, res, next) => {
-//   try {
-//     const { username, password } = req.body;
-//     if (!username || !password) {
-//       return res.status(400).json({
-//         message:
-//           "required field(s) missing. Please try again with all required fields.",
-//       });
-//     }
-//     const newUser = await Users.AddUser({
-//       username,
-
-//       password: await bcrypt.hash(password, 10),
-//     });
-//     const token = generateToken(newUser);
-
-//     res.status(201).json({ newUser, token });
-//   } catch (err) {
-//     next(err);
-//   }
-// });
-
-router.post("/register", (req, res) => {
-  const { username, password } = req.body;
-  const hash = bcrypt.hashSync(password, 12);
-
-  Users.AddUser({ username, password: hash })
-    .then((user) => {
-      res.status(201).json({ data: user });
-    })
-    .catch((err) => res.json({ error: err.message }));
-});
-
-// router.post("/login", async (req, res, next) => {
-//   try {
-//     const { username, password } = req.body;
-//     if (!username || !password) {
-//       return res.status(400).json({
-//         message:
-//           "required field(s) missing. Please try again with all required fields.",
-//       });
-//     }
-//     const user = await Users.getUserByUserName(username).first();
-//     console.log(user);
-//     if (!user) {
-//       return res.status(401).json({
-//         message: "Invalid Credentials",
-//       });
-//     }
-
-//     const passwordValid = await bcrypt.compare(password, user.password);
-
-//     if (!passwordValid) {
-//       return res.status(401).json({
-//         message: "Invalid Credentials",
-//       });
-//     }
-
-//     const token = generateToken(user);
-//     const userInfo = { id: user.id, username: user.username };
-//     res.status(200).json({
-//       message: `Welcome ${user.username}!`,
-//       userInfo,
-//       token,
-//     });
-//   } catch (err) {
-//     next(err);
-//   }
-// });
 
 //LOGIN
 router.post("/login", (req, res) => {
@@ -153,6 +96,23 @@ router.delete("/delete/:id", restricted, async (req, res, next) => {
     return res.status(204).end();
   } catch (err) {
     next(err);
+  }
+});
+
+//LOGOUT
+router.get("/logout", async (req, res, next) => {
+  if (req.session) {
+    req.session.destroy((err) => {
+      if (err) {
+        res.json({
+          message: "You can check out anytime, but you can never leave",
+        });
+      } else {
+        res.status(200).json({ message: "goodbye!" });
+      }
+    });
+  } else {
+    res.status(200).json({ message: "you were nevere here to begin with" });
   }
 });
 
