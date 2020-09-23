@@ -3,9 +3,9 @@ const bcrypt = require("bcryptjs");
 const Users = require("./model");
 const restricted = require("../middleware/restricted");
 const jwt = require("jsonwebtoken");
-// const validateUser = require("../middleware/verifyUser");
 const router = express.Router();
 const { jwtSecret } = require("../database/secret");
+
 router.get("/", restricted, async (req, res, next) => {
   try {
     const users = await Users.getAllUsers();
@@ -18,8 +18,8 @@ router.get("/", restricted, async (req, res, next) => {
 router.get("/:id", restricted, async (req, res, next) => {
   try {
     const id = req.params.id;
-
     const user = await Users.getUserById(id);
+
     if (!user) {
       res.status(404).json({ message: "User not found" });
     }
@@ -52,7 +52,6 @@ router.get("/:id", restricted, async (req, res, next) => {
 
 router.post("/register", (req, res) => {
   const { username, password } = req.body;
-
   const hash = bcrypt.hashSync(password, 12);
 
   Users.AddUser({ username, password: hash })
