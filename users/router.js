@@ -8,10 +8,10 @@ const { jwtSecret } = require("../database/secret");
 
 //REGISTER
 router.post("/register", (req, res) => {
-  const { username, password } = req.body;
+  const { name, last_name, email, username, password } = req.body;
   const hash = bcrypt.hashSync(password, 12);
 
-  Users.AddUser({ username, password: hash })
+  Users.AddUser({ name, last_name, email, username, password: hash })
     .then((user) => {
       res.status(201).json({ data: user });
     })
