@@ -27,14 +27,6 @@ router.get("/:id", restricted, async (req, res, next) => {
   }
 });
 
-router.get("/username/:id", restricted, async (req, res, next) => {
-  const stories = await Stories.getStoryByUserName(req.params.id);
-  if (!stories) {
-    return res.status(404).json({ message: "no stories found for this user" });
-  }
-  res.status(200).json(stories);
-});
-
 router.get("/userid/:id", restricted, async (req, res, next) => {
   try {
     const story = await Stories.getStoryByUserId(req.params.id);
@@ -68,7 +60,7 @@ router.post("/add", restricted, async (req, res, next) => {
   }
 });
 
-router.put("/update/:id", restricted, async (req, res, next) => {
+router.put("/:id", restricted, async (req, res, next) => {
   try {
     const id = req.params.id;
     const changes = req.body;

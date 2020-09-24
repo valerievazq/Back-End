@@ -14,11 +14,11 @@ function getAllUsers() {
 }
 
 function getUserById(id) {
-  return db("users").select("id", "username").where({ id }).first();
+  return db("users").select("id", "email").where({ id }).first();
 }
 
 function getUserByUserName(filter) {
-  return db("users").select("id", "username", "password").where(filter);
+  return db("users").select("id", "email", "password").where(filter);
 }
 
 async function AddUser(user) {

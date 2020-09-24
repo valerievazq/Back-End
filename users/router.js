@@ -8,10 +8,10 @@ const { jwtSecret } = require("../database/secret");
 
 //REGISTER
 router.post("/register", (req, res) => {
-  const { name, last_name, email, username, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
   const hash = bcrypt.hashSync(password, 12);
 
-  Users.AddUser({ name, last_name, email, username, password: hash })
+  Users.AddUser({ firstName, lastName, email, password: hash })
     .then((user) => {
       res.status(201).json({ data: user });
     })
@@ -43,9 +43,9 @@ router.get("/:id", restricted, async (req, res, next) => {
 
 //LOGIN
 router.post("/login", (req, res) => {
-  let { username, password } = req.body;
+  let { email, password } = req.body;
 
-  Users.getUserByUserName({ username })
+  Users.getUserByUserName({ email })
     .first()
     .then((user) => {
       // const user = users[0];
@@ -53,7 +53,7 @@ router.post("/login", (req, res) => {
         console.log(user);
         const token = generateToken(user);
         res.status(201).json({
-          message: `Welcome ${user.username}! Here's your token:`,
+          message: `Welcome ${user.email}! Here's your token:`,
           token,
         });
       } else {
@@ -68,21 +68,21 @@ router.post("/login", (req, res) => {
 //UPDATE
 router.put("/update/:id", restricted, async (req, res, next) => {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     const id = req.params.id;
-    if (!username || !password) {
+    if (!email || !password) {
       return res.status(400).json({
         message:
           "required field(s) missing. Please try again with all required fields.",
       });
     }
     const newUser = await Users.updateUser(id, {
-      username,
+      email,
 
       password: await bcrypt.hash(password, 10),
     });
     const user = await Users.getUserById(id);
-    const userInfo = { id: user.id, username: user.username };
+    const userInfo = { id: user.id, email: user.email };
     res.status(201).json(userInfo);
   } catch (err) {
     next(err);
@@ -119,7 +119,7 @@ router.get("/logout", async (req, res, next) => {
 function generateToken(user) {
   const payload = {
     subject: user.id,
-    username: user.username,
+    email: user.email,
   };
 
   const options = {

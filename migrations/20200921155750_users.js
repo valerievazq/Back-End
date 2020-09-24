@@ -1,10 +1,9 @@
 exports.up = async function (knex) {
   await knex.schema.createTable("users", (table) => {
     table.increments();
-    table.text("name").notNull();
-    table.text("last_name").notNull();
-    table.text("email").notNull();
-    table.text("username").notNull().unique();
+    table.text("firstName").notNull();
+    table.text("lastName").notNull();
+    table.text("email").notNull().unique();
     table.text("password").notNull();
   });
   await knex.schema.createTable("stories", (table) => {
@@ -17,7 +16,6 @@ exports.up = async function (knex) {
         .onUpdate("CASCADE")
         .onDelete("CASCADE");
     table.text("storyTitle").notNull();
-    // table.text("storyDescription").notNull();
     table.text("storyDate").notNull();
     table.text("story"), table.text("img");
   });
