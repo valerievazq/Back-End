@@ -17,7 +17,6 @@ function getStoryById(id) {
   return db("stories").select("*").where({ id }).first();
 }
 
-
 function getStoryByUserId(id) {
   return db("stories as s")
     .where("user_id", id)
@@ -26,8 +25,9 @@ function getStoryByUserId(id) {
       "u.email",
       "u.id as user_id",
       "s.id as story_id",
-      "s.storyTitle",
-      "s.storyDate",
+      "s.title",
+      "s.date",
+      "s.location",
       "s.story",
       "s.img"
     );
