@@ -47,14 +47,15 @@ router.post("/add", restricted, async (req, res, next) => {
   try {
     const story = req.body;
 
-    if (!story.user_id || !story.storyAdded || !story.story) {
-      return res.status(400).json({
+    if (!story.story) {
+      res.status(400).json({
         message:
           "required field(s) missing. Please try again with all required fields.",
       });
     }
-    const newStory = await Stories.AddStory(story);
-    res.status(201).json(newStory);
+    await Stories.AddStory(story);
+    console.log(story);
+    res.status(201).json({ Created: story });
   } catch (err) {
     next(err);
   }
