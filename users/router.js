@@ -18,7 +18,7 @@ router.post("/register", (req, res) => {
     .catch((err) => res.json({ error: err.message }));
 });
 
-router.get("/", restricted, async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const users = await Users.getAllUsers();
     res.status(200).json(users);
